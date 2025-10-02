@@ -16,6 +16,7 @@ export async function streamModelReply(
     
     const res = await fetch(`${apiHost}${endpoint}`, {
       method: "POST",
+      credentials: 'include',
       headers: { 
         "Content-Type": "application/json",
          Authorization: `Bearer ${token}`
