@@ -13,13 +13,22 @@ export async function streamModelReply(
     const apiHost = process.env.NEXT_PUBLIC_API_HOST || "";
     const endpoint = process.env.NEXT_PUBLIC_MODEL_API_ENDPOINT || "";
     
+    const response = await fetch(`${apiHost}/ai/csrf-token`, { credentials: 'include' });
+    if (!response.ok) {
+      throw new Error('Failed to get CSRF token');
+    }
+
+    const data = await response.json();
+    const csrfToken = data.csrfToken;
+    console.log('x-csrf-token', csrfToken);
     
     const res = await fetch(`${apiHost}${endpoint}`, {
       method: "POST",
       credentials: 'include',
       headers: { 
         "Content-Type": "application/json",
-         Authorization: `Bearer ${token}`
+         //Authorization: `Bearer ${token}`
+         "x-csrf-token": csrfToken
         },
       body: JSON.stringify({ prompt }),
     });
